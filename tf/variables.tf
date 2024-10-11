@@ -17,13 +17,11 @@ variable "aws_region" {
 variable "aws_access_key" {
   description = "AWS access key for Route 53"
   type        = string
-  sensitive   = true
 }
 
 variable "aws_secret_key" {
   description = "AWS secret key for Route 53"
   type        = string
-  sensitive   = true
 }
 
 variable "route53_zone_id" {
