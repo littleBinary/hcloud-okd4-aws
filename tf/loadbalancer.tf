@@ -108,51 +108,51 @@ resource "hcloud_load_balancer_service" "machine_config" {
   }
 }
 
-resource "cloudflare_record" "lb" {
-  zone_id = var.cf_zone_id
-  name = "lb.${var.cluster_name}"
-  value = hcloud_load_balancer.okd_cluster.ipv4
+resource "aws_route53_record" "lb" {
+  zone_id = var.route53_zone_id
+  name = "lb.${var.cluster_name}.${var.base_domain}"
   type = "A"
   ttl = 120
+  records = [hcloud_load_balancer.okd_cluster.ipv4]
 }
 
-resource "cloudflare_record" "api" {
-  zone_id = var.cf_zone_id
-  name = "api.${var.cluster_name}"
-  value = hcloud_load_balancer.okd_cluster.ipv4
+resource "aws_route53_record" "api" {
+  zone_id = var.route53_zone_id
+  name = "api.${var.cluster_name}.${var.base_domain}"
   type = "A"
   ttl = 120
+  records = [hcloud_load_balancer.okd_cluster.ipv4]
 }
 
-resource "cloudflare_record" "api-int" {
-  zone_id = var.cf_zone_id
-  name = "api-int.${var.cluster_name}"
-  value = hcloud_load_balancer.okd_cluster.ipv4
+resource "aws_route53_record" "api-int" {
+  zone_id = var.route53_zone_id
+  name = "api-int.${var.cluster_name}.${var.base_domain}"
   type = "A"
   ttl = 120
+  records = [hcloud_load_balancer.okd_cluster.ipv4]
 }
 
-resource "cloudflare_record" "apps" {
-  zone_id = var.cf_zone_id
-  name = "apps.${var.cluster_name}"
-  value = hcloud_load_balancer.okd_cluster.ipv4
+resource "aws_route53_record" "apps" {
+  zone_id = var.route53_zone_id
+  name = "apps.${var.cluster_name}.${var.base_domain}"
   type = "A"
   ttl = 120
+  records = [hcloud_load_balancer.okd_cluster.ipv4]
 }
 
-resource "cloudflare_record" "apps-wildcard" {
-  zone_id = var.cf_zone_id
-  name = "*.apps.${var.cluster_name}"
-  value = hcloud_load_balancer.okd_cluster.ipv4
+resource "aws_route53_record" "apps-wildcard" {
+  zone_id = var.route53_zone_id
+  name = "*.apps.${var.cluster_name}.${var.base_domain}"
   type = "A"
   ttl = 120
+  records = [hcloud_load_balancer.okd_cluster.ipv4]
 }
 
-resource "cloudflare_record" "subdomains" {
+resource "aws_route53_record" "subdomains" {
   for_each = toset(var.subdomains)
-  zone_id = var.cf_zone_id
+  zone_id = var.route53_zone_id
   name = each.value
-  value = hcloud_load_balancer.okd_cluster.ipv4
   type = "A"
   ttl = 120
+  records = [hcloud_load_balancer.okd_cluster.ipv4]
 }

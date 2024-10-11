@@ -5,7 +5,7 @@ What it does is:
 * Setup bootstrap node, master nodes & worker nodes
 * Setup a Hetzner LoadBalancer targeting all servers on the ports 80, 443, 6443, 22623 and additionally points 8443 to 6443 (useful if behind corporate network)
 * Downloads required Fedora CoreOS binaries in the /boot partition and creates a grub2 config which boots into Fedora CoreOS with the correct arguments
-* Setup all required DNS entries using [CloudFlare](https://www.cloudflare.com/)
+* Setup all required DNS entries using AWS Route 53
 
 # Installation
 As I couldn't get Fedora CoreOS properly running only using Hetzners private networks (input/PRs are welcome!) the servers are exposed using public IPs. Public access is prevented after the installation via `iptables` using a `DaemonSet`. External access is then only possible through the LoadBalancer. I recommended using a bastion node as it can be used a entrypoint over the network to your cluster and to store all required files and binaries for the installation and maintenance tasks. 
