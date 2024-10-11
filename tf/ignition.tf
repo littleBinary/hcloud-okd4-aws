@@ -18,7 +18,6 @@ resource "null_resource" "ignition_post_deploy" {
     private_key = file(var.private_key_path)
   }
 
-
   provisioner "remote-exec" {
     inline = [
       "yum -y install httpd",
@@ -54,12 +53,11 @@ resource "null_resource" "ignition_post_deploy" {
   }
 }
 
-resource "cloudflare_record" "ignition" {
-  count = var.ignition_enabled ? 1 : 0
-  zone_id = var.cf_zone_id
-  name = "ignition.${var.cluster_name}.${var.base_domain}"
-  value = hcloud_server.ignition[0].ipv4_address
-  type = "A"
-  ttl = 120
+resource "aws_route53_record" "ignition" {
+  count   = var.ignition_enabled ? 1 : 0
+  zone_id = var.route53_zone_id
+  name    = "ignition.${var.cluster_name}.${var.base_domain}"
+  type    = "A"
+  ttl     = 120
+  records = [hcloud_server.ignition[0].ipv4_address]
 }
-

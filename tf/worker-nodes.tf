@@ -58,11 +58,12 @@ resource "null_resource" "worker_post_deploy" {
   }
 }
 
-resource "cloudflare_record" "worker" {
-  count = var.worker_count
-  zone_id = var.cf_zone_id
-  name = "worker${count.index}.${var.cluster_name}"
-  value = hcloud_server.worker[count.index].ipv4_address
-  type = "A"
-  ttl = 120
+resource "aws_route53_record" "worker" {
+  count   = var.worker_count
+  zone_id = var.route53_zone_id
+  name    = "worker${count.index}.${var.cluster_name}.${var.base_domain}"
+  type    = "A"
+  ttl     = 120
+  records = [hcloud_server.worker[count.index].ipv4_address]
 }
+

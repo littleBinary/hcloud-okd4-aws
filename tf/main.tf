@@ -3,45 +3,39 @@ resource "hcloud_ssh_key" "okd4" {
   public_key = file(var.public_key_path)
 }
 
-data "template_file" "grub-bootstrap" {
-  count = var.bootstrap_enabled ? 1 : 0
-  template = file("${path.module}/tpl/40_custom.tpl")
-  vars = {
+locals {
+  grub_bootstrap_template = var.bootstrap_enabled ? templatefile("${path.module}/tpl/40_custom.tpl", {
     ignition_hostname = hcloud_server.ignition[0].ipv4_address
     server_role = "bootstrap"
     server_ip = hcloud_server.bootstrap[0].ipv4_address
     server_gateway = var.server_gateway
     server_netmask = var.server_netmask
-    server_hostname = cloudflare_record.bootstrap[0].hostname
+    server_hostname = aws_route53_record.bootstrap[0].fqdn
     server_nameserver = var.dns_server
-  }
+  }) : ""
 }
 
-data "template_file" "grub-master" {
-  count = var.ignition_enabled ? var.master_count : 0
-  template = file("${path.module}/tpl/40_custom.tpl")
-  vars = {
+locals {
+  grub_master_templates = var.ignition_enabled ? [for index in range(var.master_count) : templatefile("${path.module}/tpl/40_custom.tpl", {
     ignition_hostname = hcloud_server.ignition[0].ipv4_address
     server_role = "master"
-    server_ip = hcloud_server.master[count.index].ipv4_address
+    server_ip = hcloud_server.master[index].ipv4_address
     server_gateway = var.server_gateway
     server_netmask = var.server_netmask
-    server_hostname = cloudflare_record.master[count.index].hostname
+    server_hostname = aws_route53_record.master[index].fqdn
     server_nameserver = var.dns_server
-  }
+  })] : []
 }
 
-data "template_file" "grub-worker" {
-  count = var.ignition_enabled ? var.worker_count : 0
-  template = file("${path.module}/tpl/40_custom.tpl")
-  vars = {
+locals {
+  grub_worker_templates = var.ignition_enabled ? [for index in range(var.worker_count) : templatefile("${path.module}/tpl/40_custom.tpl", {
     ignition_hostname = hcloud_server.ignition[0].ipv4_address
     server_role = "worker"
-    server_ip = hcloud_server.worker[count.index].ipv4_address
+    server_ip = hcloud_server.worker[index].ipv4_address
     server_gateway = var.server_gateway
     server_netmask = var.server_netmask
-    server_hostname = cloudflare_record.worker[count.index].hostname
+    server_hostname = aws_route53_record.worker[index].fqdn
     server_nameserver = var.dns_server
-  }
+  })] : []
 }
 
