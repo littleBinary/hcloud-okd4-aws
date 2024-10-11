@@ -27,7 +27,15 @@ resource "null_resource" "master_post_deploy" {
   }
 
   provisioner "file" {
-    content = data.template_file.grub-master[count.index].rendered
+    content = templatefile("${path.module}/tpl/40_custom.tpl", {
+      ignition_hostname = hcloud_server.ignition[0].ipv4_address
+      server_role       = "master"
+      server_ip         = hcloud_server.master[count.index].ipv4_address
+      server_gateway    = var.server_gateway
+      server_netmask    = var.server_netmask
+      server_hostname   = aws_route53_record.master[count.index].fqdn
+      server_nameserver = var.dns_server
+    })
     destination = "/etc/grub.d/40_custom"
   }
 

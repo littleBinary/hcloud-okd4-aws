@@ -27,7 +27,15 @@ resource "null_resource" "bootstrap_post_deploy" {
   }
 
   provisioner "file" {
-    content = data.template_file.grub-bootstrap[0].rendered
+    content = templatefile("${path.module}/tpl/40_custom.tpl", {
+      ignition_hostname = hcloud_server.ignition[0].ipv4_address
+      server_role       = "bootstrap"
+      server_ip         = hcloud_server.bootstrap[0].ipv4_address
+      server_gateway    = var.server_gateway
+      server_netmask    = var.server_netmask
+      server_hostname   = aws_route53_record.bootstrap[0].fqdn
+      server_nameserver = var.dns_server
+    })
     destination = "/etc/grub.d/40_custom"
   }
 
@@ -57,4 +65,3 @@ resource "aws_route53_record" "bootstrap" {
   ttl     = 120
   records = [hcloud_server.bootstrap[0].ipv4_address]
 }
-

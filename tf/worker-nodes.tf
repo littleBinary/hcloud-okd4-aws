@@ -1,4 +1,3 @@
-
 resource "hcloud_server" "worker" {
   depends_on = [hcloud_server.master]
   count = var.worker_count
@@ -36,7 +35,15 @@ resource "null_resource" "worker_post_deploy" {
   }
 
   provisioner "file" {
-    content = data.template_file.grub-worker[count.index].rendered
+    content = templatefile("${path.module}/tpl/40_custom.tpl", {
+      ignition_hostname = hcloud_server.ignition[0].ipv4_address
+      server_role       = "worker"
+      server_ip         = hcloud_server.worker[count.index].ipv4_address
+      server_gateway    = var.server_gateway
+      server_netmask    = var.server_netmask
+      server_hostname   = aws_route53_record.worker[count.index].fqdn
+      server_nameserver = var.dns_server
+    })
     destination = "/etc/grub.d/40_custom"
   }
 
@@ -66,4 +73,3 @@ resource "aws_route53_record" "worker" {
   ttl     = 120
   records = [hcloud_server.worker[count.index].ipv4_address]
 }
-
