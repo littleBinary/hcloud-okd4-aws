@@ -49,7 +49,7 @@ variable "load_balancer_algorithm" {
 #
 variable "image" {
   type    = string
-  default = "centos-8"
+  default = "stream-9"
 }
 
 variable "region" {
