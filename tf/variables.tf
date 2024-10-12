@@ -49,7 +49,7 @@ variable "load_balancer_algorithm" {
 #
 variable "image" {
   type    = string
-  default = "stream-9"
+  default = "centos-stream-9"
 }
 
 variable "region" {
@@ -139,7 +139,7 @@ variable "openshift_installer_dir" {
 variable "worker_server_type" {
   description = "Server type for the worker nodes"
   type        = string
-  default     = "cx31"
+  default     = "cpx31"
 }
 
 variable "worker_storage_enabled" {
@@ -172,7 +172,7 @@ variable "bootstrap_enabled" {
 variable "bootstrap_server_type" {
   description = "Server type for the bootstrap server"
   type        = string
-  default     = "cx41"
+  default     = "cx42"
 }
 
 #
@@ -181,7 +181,7 @@ variable "bootstrap_server_type" {
 variable "master_server_type" {
   description = "Server type for the master nodes"
   type        = string
-  default     = "cx41"
+  default     = "cx42"
 }
 
 variable "master_count" {
