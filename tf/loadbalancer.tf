@@ -38,9 +38,9 @@ resource "hcloud_load_balancer_service" "http" {
   health_check {
     protocol = "tcp"
     port = 80
-    interval = 5
-    timeout = 3
-    retries = 2
+    interval = 10
+    timeout = 5
+    retries = 5
   }
 }
 
@@ -54,9 +54,9 @@ resource "hcloud_load_balancer_service" "https" {
   health_check {
     protocol = "tcp"
     port = 443
-    interval = 5
-    timeout = 3
-    retries = 2
+    interval = 10
+    timeout = 5
+    retries = 5
   }
 }
 
@@ -70,9 +70,9 @@ resource "hcloud_load_balancer_service" "api" {
   health_check {
     protocol = "tcp"
     port = 6443
-    interval = 5
-    timeout = 3
-    retries = 2
+    interval = 10
+    timeout = 5
+    retries = 5
   }
 }
 
@@ -86,9 +86,9 @@ resource "hcloud_load_balancer_service" "api-alt" {
   health_check {
     protocol = "tcp"
     port = 6443
-    interval = 5
-    timeout = 3
-    retries = 2
+    interval = 10
+    timeout = 5
+    retries = 5
   }
 }
 
@@ -102,9 +102,9 @@ resource "hcloud_load_balancer_service" "machine_config" {
   health_check {
     protocol = "tcp"
     port = 22623
-    interval = 5
-    timeout = 3
-    retries = 2
+    interval = 10
+    timeout = 5
+    retries = 5
   }
 }
 

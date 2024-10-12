@@ -208,7 +208,7 @@ variable "server_netmask" {
 variable "dns_server" {
   description = "DNS server for the network"
   type        = string
-  default     = "1.1.1.1"
+  default     = "8.8.8.8"
 }
 
 #
