@@ -6,3 +6,4 @@ terraform.tfvars
 id_rsa
 .idea/
 .cluster.tfstate.lock.info
+tfplan
